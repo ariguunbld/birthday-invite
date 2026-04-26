@@ -23,22 +23,22 @@ const PARTICLE_OPTS = {
   background: { color: { value: "transparent" } },
   fpsLimit: 60,
   particles: {
-    color: { value: ["#C9973A", "#E8704A", "#F4C875", "#ffffff"] },
+    color: { value: ["#3B82F6", "#F472B6", "#FDE047", "#ffffff"] },
     shape: { type: "circle" },
     opacity: {
-      value: { min: 0, max: 0.5 },
+      value: { min: 0.1, max: 0.8 },
       animation: {
         enable: true,
-        speed: 1.5,
+        speed: 3,
         startValue: "random" as const,
         destroy: "none" as const,
         sync: false,
       },
     },
-    size: { value: { min: 0.5, max: 2.5 } },
+    size: { value: { min: 1, max: 4 } },
     move: {
       enable: true,
-      speed: 0.4,
+      speed: 0.8,
       direction: "none" as const,
       random: true,
       straight: false,
@@ -170,10 +170,14 @@ export default function BirthdayPage() {
   }, []);
 
   return (
-    <div
-      ref={containerRef}
-      className="relative bg-[#FBF5EE] min-h-screen overflow-x-hidden"
-    >
+    <div ref={containerRef} className="relative min-h-screen overflow-x-hidden">
+      {/* Mesh Background Blobs (Гэрэлтсэн туяанууд) */}
+      <div className="mesh-bg">
+        <div className="mesh-blob blob-1" />
+        <div className="mesh-blob blob-2" />
+        <div className="mesh-blob blob-3" />
+      </div>
+
       {/* Grain texture overlay */}
       <div className="grain-overlay" />
 
@@ -219,10 +223,10 @@ export default function BirthdayPage() {
           </div>
 
           <div ref={subtitleRef} className="mb-6 px-4">
-            <h1 className="font-(family-name:--font-playfair) text-5xl font-black italic text-[#1C0F00] tracking-tighter pr-2">
+            <h1 className="font-(family-name:--font-playfair) text-5xl font-black italic text-[#0F172A] tracking-tighter pr-2">
               Ө. Хангай
             </h1>
-            <div className="w-12 h-0.5 bg-[#E8704A] mx-auto mt-2 opacity-60" />
+            <div className="w-16 h-1.5 bg-gradient-to-r from-[#3B82F6] via-[#F472B6] to-[#FDE047] mx-auto mt-3 rounded-full shadow-lg" />
           </div>
 
           {/* Title — more refined typography */}
@@ -230,15 +234,15 @@ export default function BirthdayPage() {
             <div className="overflow-hidden">
               <div
                 ref={titleLine1}
-                className="text-[0.7rem] tracking-[0.4em] uppercase text-[#8B6F5E] font-bold mb-2"
+                className="text-[0.75rem] tracking-[0.5em] uppercase text-[#1E293B] font-black mb-3"
               >
-                Нэг насны
+                Нэг насны баяр
               </div>
             </div>
             <div className="overflow-hidden">
               <div
                 ref={titleLine2}
-                className="hero-line hero-line--coral text-[3.5rem]! sm:text-[4.5rem]!"
+                className="hero-line hero-line--coral !text-[3.8rem] sm:!text-[5rem] drop-shadow-sm"
               >
                 Төрсөн өдөр
               </div>
@@ -290,8 +294,8 @@ export default function BirthdayPage() {
 
         {/* Second scroll hint */}
         <div className="mt-12 flex flex-col items-center gap-2">
-          <span className="text-[10px] tracking-[0.25em] uppercase text-[#8B6F5E]">
-            Доош гүйлгээрэй
+          <span className="text-[10px] tracking-[0.25em] uppercase text-[#64748B]">
+            Үргэлжлүүл
           </span>
           <div className="scroll-hint-line" />
         </div>
@@ -300,7 +304,7 @@ export default function BirthdayPage() {
       {/* ══ DETAILS ═══════════════════════════════════ */}
       <section
         ref={detailsRef}
-        className="relative z-10 py-4 px-6 max-w-sm mx-auto"
+        className="relative z-10 py-20 px-6 max-w-sm mx-auto"
       >
         <div className="detail-grid">
           {/* Date */}
@@ -308,32 +312,36 @@ export default function BirthdayPage() {
             <p className="detail-label">Хэзээ</p>
             <div className="detail-divider" />
             <p className="detail-val">05.02</p>
-            <p className="detail-sub">Бямба</p>
+            <p className="detail-sub text-[0.65rem] text-[#64748B] italic">
+              Бямба
+            </p>
           </div>
 
           {/* Time */}
           <div className="detail-card">
             <p className="detail-label">Хэдэн цагт</p>
             <div className="detail-divider" />
-            <p className="detail-val">12:00 цагт</p>
-            <p className="detail-sub">Эхлэх болно</p>
+            <p className="detail-val">12:00</p>
+            <p className="detail-sub text-[0.65rem] text-[#64748B] italic">
+              Үдийн зоог
+            </p>
           </div>
 
           {/* Location */}
           <div className="detail-card detail-card--full">
             <p className="detail-label">Байршил</p>
             <div className="detail-divider" />
-            <p className="detail-val text-balance">
+            <p className="detail-val text-balance text-[1rem]">
               Зайсан, Хан голомт резиденс
             </p>
-            <p className="detail-sub not-italic font-medium mt-2">
+            <p className="detail-sub not-italic font-medium mt-1 text-[#64748B] text-[0.75rem]">
               Club House, 1-р давхар
             </p>
             <a
               href="https://www.google.com/maps/search/Khan+Golomt+Residence+Zaisan+Ulaanbaatar"
               target="_blank"
               rel="noopener noreferrer"
-              className="mt-4 flex items-center gap-2 text-[#C9973A] text-[0.65rem] font-bold tracking-widest uppercase border border-[rgba(201,151,58,0.2)] px-4 py-2 rounded-full transition-colors hover:bg-[rgba(201,151,58,0.05)] active:scale-95"
+              className="mt-4 flex items-center justify-center gap-2 text-[#3B82F6] text-[0.65rem] font-bold tracking-widest uppercase border border-[rgba(59,130,246,0.15)] px-4 py-2 rounded-full transition-colors hover:bg-[rgba(59,130,246,0.05)] active:scale-95 mx-auto w-fit"
             >
               <span>📍 Google Map харах</span>
             </a>
@@ -348,7 +356,7 @@ export default function BirthdayPage() {
       >
         <div className="cta-card">
           <div className="cta-inner">
-            <p className="font-(family-name:--font-playfair) text-xl italic text-[#1C0F00] mb-2">
+            <p className="font-(family-name:--font-playfair) text-xl italic text-[#0F172A] mb-2">
               Та бүхнийг тэсэн ядан хүлээж байна! 🥳
             </p>
           </div>
