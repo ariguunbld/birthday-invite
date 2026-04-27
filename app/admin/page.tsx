@@ -244,13 +244,6 @@ export default function AdminPage() {
                     >
                       {downloading === guest.id ? "Түр хүлээнэ үү..." : "QR хуулах"}
                     </button>
-                    <button
-                      onClick={() => downloadQR(guest)}
-                      disabled={downloading === guest.id}
-                      className="rounded-xl bg-gray-100 px-3 py-2 text-xs font-bold text-gray-700 hover:bg-gray-200 transition disabled:opacity-50"
-                    >
-                      Татах
-                    </button>
                     <a
                       href={`/invite/${guest.id}`}
                       target="_blank"
