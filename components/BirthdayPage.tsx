@@ -12,9 +12,9 @@ gsap.registerPlugin(ScrollTrigger);
 
 // ── Replace with your actual image paths ─────────────────
 const PHOTOS = [
-  { src: "/images/photo1.jpg", caption: "Эхний өдөр" },
-  { src: "/images/photo2.jpg", caption: "Тав дахь сар" },
-  { src: "/images/photo3.jpg", caption: "Нэг нас" },
+  { src: "/image1.jpeg", caption: "" },
+  { src: "/image2.jpeg", caption: "" },
+  { src: "/image3.jpeg", caption: "" },
 ];
 const ROTATIONS = [-4, 2.5, -2];
 // ─────────────────────────────────────────────────────────
@@ -271,7 +271,7 @@ export default function BirthdayPage() {
         <div className="photos-scroll">
           {PHOTOS.map(({ src, caption }, i) => (
             <figure
-              key={caption}
+              key={src}
               className="polaroid-card"
               style={{ "--rot": `${ROTATIONS[i]}deg` } as React.CSSProperties}
             >
@@ -281,7 +281,7 @@ export default function BirthdayPage() {
                   src={src}
                   alt={caption}
                   fill
-                  sizes="260px"
+                  sizes="320px"
                   style={{ objectFit: "cover" }}
                 />
               </div>

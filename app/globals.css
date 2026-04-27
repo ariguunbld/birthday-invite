@@ -153,12 +153,12 @@
 .photos-scroll::-webkit-scrollbar { display: none; }
 
 .polaroid-card {
-  flex: 0 0 260px;
+  flex: 0 0 320px;
   scroll-snap-align: center;
   background: #fff;
-  padding: 0.7rem 0.7rem 2.2rem;
+  padding: 1rem 1rem 3.5rem;
   border-radius: 2px;
-  box-shadow: 0 10px 30px rgba(0,0,0,0.06);
+  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
   transform: rotate(var(--rot, 0deg));
   position: relative;
   transition: transform 0.4s ease;
@@ -184,6 +184,14 @@
   font-size: 0.75rem;
   color: #64748B;
   font-style: italic;
+}
+
+.photo-frame {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background: #f8fafc;
 }
 
 /* ── DETAILS (Original Asymmetric Grid) ─────── */
