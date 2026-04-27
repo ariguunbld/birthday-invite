@@ -223,14 +223,17 @@ export default function AdminPage() {
           ) : (
             <ul className="divide-y divide-gray-50">
               {guests.map((guest) => (
-                <li key={guest.id} className="flex items-center gap-4 px-6 py-4 hover:bg-gray-50 transition">
+                <li key={guest.id} className="flex flex-col sm:flex-row sm:items-center gap-4 px-6 py-4 hover:bg-gray-50 transition">
                   <div className="flex-1 min-w-0">
                     <p className="font-semibold text-gray-800 truncate">{guest.name}</p>
                     <p className="text-xs text-gray-400 mt-0.5">
-                      {new Date(guest.createdAt).toLocaleString("mn-MN")}
+                      {(() => {
+                        const date = new Date(guest.createdAt);
+                        return `${date.getFullYear()} / ${String(date.getMonth() + 1).padStart(2, '0')} / ${String(date.getDate()).padStart(2, '0')}`;
+                      })()}
                     </p>
                   </div>
-                  <div className="flex gap-2 shrink-0">
+                  <div className="flex flex-wrap gap-2 shrink-0 mt-2 sm:mt-0">
                     <button
                       onClick={() => copyLink(guest.id)}
                       className="rounded-xl bg-blue-50 px-3 py-2 text-xs font-bold text-blue-600 hover:bg-blue-100 transition"

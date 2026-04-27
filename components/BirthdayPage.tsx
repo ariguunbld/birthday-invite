@@ -55,6 +55,7 @@ export default function BirthdayPage() {
   const badgeRef = useRef<HTMLDivElement>(null);
   const titleLine1 = useRef<HTMLDivElement>(null);
   const titleLine2 = useRef<HTMLDivElement>(null);
+  const heroDateRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
   const detailsRef = useRef<HTMLElement>(null);
@@ -114,6 +115,11 @@ export default function BirthdayPage() {
           titleLine2.current,
           { yPercent: 110, opacity: 0, duration: 0.7, ease: "power3.out" },
           "-=0.5",
+        )
+        .from(
+          heroDateRef.current,
+          { y: 10, opacity: 0, duration: 0.6, ease: "power2.out" },
+          "-=0.3",
         )
         .from(hintRef.current, { opacity: 0, y: 8, duration: 0.45 }, "+=0.35");
 
@@ -226,7 +232,7 @@ export default function BirthdayPage() {
             <h1 className="font-(family-name:--font-playfair) text-5xl font-black italic text-[#0F172A] tracking-tighter pr-2">
               Ө. Хангай
             </h1>
-            <div className="w-16 h-1.5 bg-gradient-to-r from-[#3B82F6] via-[#F472B6] to-[#FDE047] mx-auto mt-3 rounded-full shadow-lg" />
+            <div className="w-16 h-1.5 bg-linear-to-r from-[#3B82F6] via-[#F472B6] to-[#FDE047] mx-auto mt-3 rounded-full shadow-lg" />
           </div>
 
           {/* Title — more refined typography */}
@@ -242,10 +248,16 @@ export default function BirthdayPage() {
             <div className="overflow-hidden">
               <div
                 ref={titleLine2}
-                className="hero-line hero-line--coral !text-[3.8rem] sm:!text-[5rem] drop-shadow-sm"
+                className="hero-line hero-line--coral text-[3.8rem]! sm:text-[5rem]! drop-shadow-sm"
               >
                 Төрсөн өдөр
               </div>
+            </div>
+            <div
+              ref={heroDateRef}
+              className="text-[0.9rem] font-bold text-[#1E293B] mt-2 tracking-widest opacity-80"
+            >
+              5 САРЫН 2
             </div>
           </div>
         </div>
@@ -285,7 +297,7 @@ export default function BirthdayPage() {
                   style={{ objectFit: "cover" }}
                 />
               </div>
-              <figcaption className="polaroid-caption !text-[0.75rem] !mt-4">
+              <figcaption className="polaroid-caption text-[0.75rem]! mt-4!">
                 {caption}
               </figcaption>
             </figure>
@@ -295,7 +307,7 @@ export default function BirthdayPage() {
         {/* Second scroll hint */}
         <div className="mt-12 flex flex-col items-center gap-2">
           <span className="text-[10px] tracking-[0.25em] uppercase text-[#64748B]">
-            Үргэлжлүүл
+            Доош гүйлгээрэй
           </span>
           <div className="scroll-hint-line" />
         </div>
@@ -311,7 +323,7 @@ export default function BirthdayPage() {
           <div className="detail-card">
             <p className="detail-label">Хэзээ</p>
             <div className="detail-divider" />
-            <p className="detail-val">05.02</p>
+            <p className="detail-val">5 сарын 2</p>
             <p className="detail-sub text-[0.65rem] text-[#64748B] italic">
               Бямба
             </p>

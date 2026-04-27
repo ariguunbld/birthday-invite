@@ -119,24 +119,56 @@ export default async function InvitePage({ params }: Readonly<Props>) {
         </section>
 
         {/* Details Grid */}
-        <section className="mb-24">
+        <section className="relative z-10 py-20 px-6 max-w-sm mx-auto">
           <div className="detail-grid">
+            {/* Date */}
             <div className="detail-card">
-              <p className="detail-label">Огноо</p>
+              <p className="detail-label">Хэзээ</p>
               <div className="detail-divider" />
-              <p className="detail-val">2026.04.27</p>
+              <p className="detail-val">5 сарын 2</p>
+              <p className="detail-sub text-[0.65rem] text-[#64748B] italic">
+                Бямба
+              </p>
             </div>
+
+            {/* Time */}
             <div className="detail-card">
-              <p className="detail-label">Цаг</p>
+              <p className="detail-label">Хэдэн цагт</p>
               <div className="detail-divider" />
-              <p className="detail-val">15:00</p>
+              <p className="detail-val">12:00</p>
+              <p className="detail-sub text-[0.65rem] text-[#64748B] italic">
+                Үдийн зоог
+              </p>
             </div>
+
+            {/* Location */}
             <div className="detail-card detail-card--full">
               <p className="detail-label">Байршил</p>
               <div className="detail-divider" />
-              <p className="detail-val">&quot;Sky Garden&quot; Ресторан</p>
-              <p className="mt-2 text-[10px] text-gray-400">
-                Сүхбаатар дүүрэг, 1-р хороо
+              <p className="detail-val text-balance text-[1rem]">
+                Зайсан, Хан голомт резиденс
+              </p>
+              <p className="detail-sub not-italic font-medium mt-1 text-[#64748B] text-[0.75rem]">
+                Club House, 1-р давхар
+              </p>
+              <a
+                href="https://www.google.com/maps/search/Khan+Golomt+Residence+Zaisan+Ulaanbaatar"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="mt-4 flex items-center justify-center gap-2 text-[#3B82F6] text-[0.65rem] font-bold tracking-widest uppercase border border-[rgba(59,130,246,0.15)] px-4 py-2 rounded-full transition-colors hover:bg-[rgba(59,130,246,0.05)] active:scale-95 mx-auto w-fit"
+              >
+                <span>📍 Google Map харах</span>
+              </a>
+            </div>
+          </div>
+        </section>
+
+        {/* CTA Section */}
+        <section className="relative z-10 px-5 pb-24 flex justify-center">
+          <div className="cta-card">
+            <div className="cta-inner">
+              <p className="font-(family-name:--font-playfair) text-xl italic text-[#0F172A] mb-2 text-center">
+                Та бүхнийг тэсэн ядан хүлээж байна! 🥳
               </p>
             </div>
           </div>
