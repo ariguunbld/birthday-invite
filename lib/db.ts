@@ -14,11 +14,15 @@ const KV_KEY = "guests";
  */
 export async function readGuests(): Promise<Guest[]> {
   try {
+    if (!process.env.KV_REST_API_URL) {
+      console.error("CRITICAL: KV_REST_API_URL is missing!");
+    }
     const guests = await kv.get<Guest[]>(KV_KEY);
     return guests || [];
   } catch (error) {
     console.error("Error reading guests from KV:", error);
-    return [];
+    // If it's a connection error, we want to know
+    throw error; 
   }
 }
 
@@ -28,9 +32,9 @@ export async function readGuests(): Promise<Guest[]> {
 export async function writeGuests(guests: Guest[]): Promise<void> {
   try {
     await kv.set(KV_KEY, guests);
-  } catch (error) {
-    console.error("Error writing guests to KV:", error);
-    throw new Error("Өгөгдлийг хадгалахад алдаа гарлаа");
+  } catch (error: any) {
+    console.error("Error writing guests to KV:", error.message, error.stack);
+    throw new Error(`Өгөгдлийг хадгалахад алдаа гарлаа: ${error.message}`);
   }
 }
 

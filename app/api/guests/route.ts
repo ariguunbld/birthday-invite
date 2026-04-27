@@ -12,18 +12,32 @@ export async function GET() {
 }
 
 export async function POST(req: NextRequest) {
-  if (!(await isAuthenticated())) {
-    return NextResponse.json({ error: "Нэвтрэх шаардлагатай" }, { status: 401 });
-  }
-  const { name } = await req.json();
-  if (!name?.trim()) {
-    return NextResponse.json({ error: "Нэр оруулна уу" }, { status: 400 });
-  }
+  try {
+    if (!(await isAuthenticated())) {
+      return NextResponse.json({ error: "Нэвтрэх шаардлагатай" }, { status: 401 });
+    }
+    const body = await req.json();
+    const { name } = body;
+    
+    if (!name?.trim()) {
+      return NextResponse.json({ error: "Нэр оруулна уу" }, { status: 400 });
+    }
 
-  const guests = await readGuests();
-  const newGuest = { id: uuidv4(), name: name.trim(), createdAt: new Date().toISOString() };
-  guests.push(newGuest);
-  await writeGuests(guests);
+    console.log("Attempting to read guests...");
+    const guests = await readGuests();
+    
+    const newGuest = { id: uuidv4(), name: name.trim(), createdAt: new Date().toISOString() };
+    guests.push(newGuest);
+    
+    console.log("Attempting to write guest:", newGuest.name);
+    await writeGuests(guests);
 
-  return NextResponse.json(newGuest, { status: 201 });
+    return NextResponse.json(newGuest, { status: 201 });
+  } catch (error: any) {
+    console.error("POST /api/guests error:", error);
+    return NextResponse.json({ 
+      error: "Дотоод алдаа гарлаа", 
+      details: error.message 
+    }, { status: 500 });
+  }
 }
