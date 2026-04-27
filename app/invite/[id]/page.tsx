@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import { findGuest } from "@/lib/db";
 import Confetti from "@/components/Confetti";
 import Image from "next/image";
+import BackgroundMusic from "@/components/BackgroundMusic";
 
 import RSVPForm from "@/components/RSVPForm";
 
@@ -17,6 +18,7 @@ export default async function InvitePage({ params }: Readonly<Props>) {
 
   return (
     <div className="relative min-h-screen bg-white text-[#0F172A] selection:bg-pink-100">
+      <BackgroundMusic type="invite" />
       <Confetti />
 
       {/* Background Mesh */}

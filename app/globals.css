@@ -2,26 +2,71 @@
 
 /* ── keyframes ──────────────────────────────── */
 @keyframes sunburst-rotate {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 @keyframes float-pop {
-  0%, 100% { transform: translate(0, 0) scale(1); }
-  50% { transform: translate(10px, -15px) scale(1.1) rotate(5deg); }
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  50% {
+    transform: translate(10px, -15px) scale(1.1) rotate(5deg);
+  }
 }
 @keyframes wiggle {
-  0%, 100% { transform: rotate(-0.5deg); }
-  50% { transform: rotate(1deg) scale(1.01); }
+  0%,
+  100% {
+    transform: rotate(-0.5deg);
+  }
+  50% {
+    transform: rotate(1deg) scale(1.01);
+  }
 }
 @keyframes mesh-float {
-  0% { transform: translate(0, 0) scale(1); }
-  33% { transform: translate(30px, -40px) scale(1.1); }
-  66% { transform: translate(-20px, 20px) scale(0.9); }
-  100% { transform: translate(0, 0) scale(1); }
+  0% {
+    transform: translate(0, 0) scale(1);
+  }
+  33% {
+    transform: translate(30px, -40px) scale(1.1);
+  }
+  66% {
+    transform: translate(-20px, 20px) scale(0.9);
+  }
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
 }
 @keyframes hint-bob {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(6px); }
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(6px);
+  }
+}
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* ── Background Mesh ────────────────────────── */
@@ -41,9 +86,23 @@
   border-radius: 50%;
   animation: mesh-float 15s infinite alternate ease-in-out;
 }
-.blob-1 { background: #3B82F6; top: -100px; left: -100px; }
-.blob-2 { background: #FDE047; bottom: -100px; right: -100px; animation-delay: -5s; }
-.blob-3 { background: #F472B6; top: 40%; left: 30%; animation-delay: -10s; }
+.blob-1 {
+  background: #3b82f6;
+  top: -100px;
+  left: -100px;
+}
+.blob-2 {
+  background: #fde047;
+  bottom: -100px;
+  right: -100px;
+  animation-delay: -5s;
+}
+.blob-3 {
+  background: #f472b6;
+  top: 40%;
+  left: 30%;
+  animation-delay: -10s;
+}
 
 /* ── Hero Photo ─────────────────────────────── */
 .hero-photo-wrap {
@@ -53,7 +112,7 @@
 }
 .hero-photo-ring {
   position: absolute;
-  inset: -35px;
+  inset: -45px;
   z-index: 0;
 }
 .hero-photo-ring::before {
@@ -62,17 +121,29 @@
   inset: 0;
   background: conic-gradient(
     from 0deg,
-    #3B82F6 0deg 30deg, transparent 30deg 60deg,
-    #F472B6 60deg 90deg, transparent 90deg 120deg,
-    #FDE047 120deg 150deg, transparent 150deg 180deg,
-    #3B82F6 180deg 210deg, transparent 210deg 240deg,
-    #F472B6 240deg 270deg, transparent 270deg 300deg,
-    #FDE047 300deg 330deg, transparent 330deg 360deg
+    #3b82f6 0deg 20deg,
+    transparent 20deg 40deg,
+    #f472b6 40deg 60deg,
+    transparent 60deg 80deg,
+    #fde047 80deg 100deg,
+    transparent 100deg 120deg,
+    #3b82f6 120deg 140deg,
+    transparent 140deg 160deg,
+    #f472b6 160deg 180deg,
+    transparent 180deg 200deg,
+    #fde047 200deg 220deg,
+    transparent 220deg 240deg,
+    #3b82f6 240deg 260deg,
+    transparent 260deg 280deg,
+    #f472b6 280deg 300deg,
+    transparent 300deg 320deg,
+    #fde047 320deg 340deg,
+    transparent 340deg 360deg
   );
   border-radius: 50%;
-  animation: sunburst-rotate 20s linear infinite;
-  opacity: 0.1;
-  filter: blur(3px);
+  animation: sunburst-rotate 15s linear infinite;
+  opacity: 0.35;
+  filter: blur(4px);
 }
 .hero-photo-frame {
   position: relative;
@@ -81,7 +152,7 @@
   border-radius: 110px 110px 30px 30px;
   overflow: hidden;
   border: 5px solid #fff;
-  box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.08);
   z-index: 1;
 }
 
@@ -98,15 +169,15 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-  border: 3px solid #3B82F6;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+  border: 3px solid #3b82f6;
   z-index: 2;
   transform: rotate(10deg);
 }
 .badge-num {
   font-family: var(--font-playfair);
   font-weight: 900;
-  background: linear-gradient(135deg, #3B82F6 0%, #F472B6 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #f472b6 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -118,10 +189,10 @@
   font-size: clamp(3rem, 14vw, 6rem);
   font-weight: 950;
   line-height: 1;
-  color: #0F172A;
+  color: #0f172a;
 }
 .hero-line--coral {
-  background: linear-gradient(90deg, #3B82F6, #F472B6, #FDE047);
+  background: linear-gradient(90deg, #3b82f6, #f472b6, #fde047);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -129,13 +200,15 @@
   animation: shine 4s linear infinite;
 }
 @keyframes shine {
-  to { background-position: 200% center; }
+  to {
+    background-position: 200% center;
+  }
 }
 
 .scroll-hint-line {
   width: 2px;
   height: 2.5rem;
-  background: linear-gradient(to bottom, #3B82F6, transparent);
+  background: linear-gradient(to bottom, #3b82f6, transparent);
   border-radius: 2px;
   animation: hint-bob 2s ease-in-out infinite;
 }
@@ -149,7 +222,9 @@
   animation: confetti-fall linear infinite;
 }
 @keyframes confetti-fall {
-  to { transform: translateY(110vh) rotate(360deg); }
+  to {
+    transform: translateY(110vh) rotate(360deg);
+  }
 }
 
 /* ── GRAIN OVERLAY ──────────────────────────── */
@@ -173,7 +248,9 @@
   scrollbar-width: none;
   align-items: center;
 }
-.photos-scroll::-webkit-scrollbar { display: none; }
+.photos-scroll::-webkit-scrollbar {
+  display: none;
+}
 
 .polaroid-card {
   flex: 0 0 320px;
@@ -181,7 +258,7 @@
   background: #fff;
   padding: 1rem 1rem 3.5rem;
   border-radius: 2px;
-  box-shadow: 0 10px 40px rgba(0,0,0,0.08);
+  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
   transform: rotate(var(--rot, 0deg));
   position: relative;
   transition: transform 0.4s ease;
@@ -205,7 +282,7 @@
   text-align: center;
   font-family: var(--font-dm-sans);
   font-size: 0.75rem;
-  color: #64748B;
+  color: #64748b;
   font-style: italic;
 }
 
@@ -229,7 +306,7 @@
   border-radius: 1.25rem;
   padding: 1.5rem 1rem;
   text-align: center;
-  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.02);
 }
 .detail-card--full {
   grid-column: span 2;
@@ -238,7 +315,7 @@
 .detail-divider {
   width: 30px;
   height: 2px;
-  background: #FDE047;
+  background: #fde047;
   margin: 0.8rem auto;
   border-radius: 2px;
 }
@@ -248,20 +325,20 @@
   font-weight: 800;
   text-transform: uppercase;
   letter-spacing: 0.2em;
-  color: #3B82F6;
+  color: #3b82f6;
 }
 .detail-val {
   font-family: var(--font-playfair);
   font-weight: 800;
   font-size: 1.15rem;
-  color: #0F172A;
+  color: #0f172a;
 }
 
 /* ── CTA (Original Button Style) ────────────── */
 .cta-card {
   width: 100%;
   max-width: 340px;
-  background: linear-gradient(135deg, #3B82F6 0%, #F472B6 100%);
+  background: linear-gradient(135deg, #3b82f6 0%, #f472b6 100%);
   border-radius: 1.5rem;
   padding: 2px;
   box-shadow: 0 10px 30px rgba(59, 130, 246, 0.2);
@@ -276,7 +353,7 @@
 body {
   font-family: var(--font-dm-sans), sans-serif;
   background-color: #fff;
-  color: #0F172A;
+  color: #0f172a;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }

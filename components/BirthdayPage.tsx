@@ -7,6 +7,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Lenis from "lenis";
 import Particles, { initParticlesEngine } from "@tsparticles/react";
 import { loadSlim } from "@tsparticles/slim";
+import BackgroundMusic from "./BackgroundMusic";
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -181,6 +182,7 @@ export default function BirthdayPage() {
 
   return (
     <div ref={containerRef} className="relative min-h-screen overflow-x-hidden">
+      <BackgroundMusic type="landing" />
       {/* Mesh Background Blobs (Гэрэлтсэн туяанууд) */}
       <div className="mesh-bg">
         <div className="mesh-blob blob-1" />
