@@ -1,4 +1,4 @@
-import { kv } from "@vercel/kv";
+import Redis from "ioredis";
 
 export interface Guest {
   id: string;
@@ -8,32 +8,39 @@ export interface Guest {
 
 const KV_KEY = "guests";
 
+// Initialize Redis client with the REDIS_URL
+const redis = new Redis(process.env.REDIS_URL || "");
+
+redis.on("error", (err) => {
+  console.error("Redis Connection Error:", err);
+});
+
 /**
- * Reads all guests from Vercel KV.
- * Returns an empty array if no data exists or on error.
+ * Reads all guests from Redis.
  */
 export async function readGuests(): Promise<Guest[]> {
   try {
-    if (!process.env.KV_REST_API_URL) {
-      console.error("CRITICAL: KV_REST_API_URL is missing!");
+    if (!process.env.REDIS_URL) {
+      console.error("CRITICAL: REDIS_URL is missing!");
+      return [];
     }
-    const guests = await kv.get<Guest[]>(KV_KEY);
-    return guests || [];
+    const data = await redis.get(KV_KEY);
+    if (!data) return [];
+    return JSON.parse(data) as Guest[];
   } catch (error) {
-    console.error("Error reading guests from KV:", error);
-    // If it's a connection error, we want to know
-    throw error; 
+    console.error("Error reading guests from Redis:", error);
+    return [];
   }
 }
 
 /**
- * Writes the entire guests array to Vercel KV.
+ * Writes the entire guests array to Redis.
  */
 export async function writeGuests(guests: Guest[]): Promise<void> {
   try {
-    await kv.set(KV_KEY, guests);
+    await redis.set(KV_KEY, JSON.stringify(guests));
   } catch (error: any) {
-    console.error("Error writing guests to KV:", error.message, error.stack);
+    console.error("Error writing guests to Redis:", error.message);
     throw new Error(`Өгөгдлийг хадгалахад алдаа гарлаа: ${error.message}`);
   }
 }
