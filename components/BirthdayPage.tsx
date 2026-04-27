@@ -52,7 +52,6 @@ const PARTICLE_OPTS = {
 export default function BirthdayPage() {
   const containerRef = useRef<HTMLDivElement>(null);
   const photoWrapRef = useRef<HTMLDivElement>(null);
-  const badgeRef = useRef<HTMLDivElement>(null);
   const titleLine1 = useRef<HTMLDivElement>(null);
   const titleLine2 = useRef<HTMLDivElement>(null);
   const heroDateRef = useRef<HTMLDivElement>(null);
@@ -240,10 +239,18 @@ export default function BirthdayPage() {
           <div className="flex flex-col gap-0">
             <div className="overflow-hidden">
               <div
+                ref={titleLine1}
+                className="text-[0.75rem] tracking-[0.5em] uppercase text-[#1E293B] font-black mb-3"
+              >
+                Нэг насны баяр
+              </div>
+            </div>
+            <div className="overflow-hidden">
+              <div
                 ref={titleLine2}
                 className="hero-line hero-line--coral text-[2.8rem]! sm:text-[4rem]! drop-shadow-sm leading-tight px-4"
               >
-                Миний нэг насны баяр
+                Миний төрсөн өдөр
               </div>
             </div>
             <div
