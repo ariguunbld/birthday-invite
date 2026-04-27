@@ -112,7 +112,7 @@ export default async function InvitePage({ params }: Readonly<Props>) {
                     className="object-cover"
                   />
                 </div>
-                <p className="polaroid-caption">{p.cap}</p>
+                {/* <p className="polaroid-caption">{p.cap}</p> */}
               </div>
             ))}
           </div>
