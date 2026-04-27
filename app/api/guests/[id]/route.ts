@@ -10,8 +10,8 @@ export async function DELETE(
     return NextResponse.json({ error: "Нэвтрэх шаардлагатай" }, { status: 401 });
   }
   const { id } = await params;
-  const guests = readGuests();
+  const guests = await readGuests();
   const filtered = guests.filter((g) => g.id !== id);
-  writeGuests(filtered);
+  await writeGuests(filtered);
   return NextResponse.json({ ok: true });
 }

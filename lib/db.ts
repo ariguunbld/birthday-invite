@@ -1,5 +1,4 @@
-import fs from "fs";
-import path from "path";
+import { kv } from "@vercel/kv";
 
 export interface Guest {
   id: string;
@@ -7,21 +6,38 @@ export interface Guest {
   createdAt: string;
 }
 
-const DB_PATH = path.join(process.cwd(), "data", "guests.json");
+const KV_KEY = "guests";
 
-export function readGuests(): Guest[] {
+/**
+ * Reads all guests from Vercel KV.
+ * Returns an empty array if no data exists or on error.
+ */
+export async function readGuests(): Promise<Guest[]> {
   try {
-    const raw = fs.readFileSync(DB_PATH, "utf-8");
-    return JSON.parse(raw) as Guest[];
-  } catch {
+    const guests = await kv.get<Guest[]>(KV_KEY);
+    return guests || [];
+  } catch (error) {
+    console.error("Error reading guests from KV:", error);
     return [];
   }
 }
 
-export function writeGuests(guests: Guest[]): void {
-  fs.writeFileSync(DB_PATH, JSON.stringify(guests, null, 2), "utf-8");
+/**
+ * Writes the entire guests array to Vercel KV.
+ */
+export async function writeGuests(guests: Guest[]): Promise<void> {
+  try {
+    await kv.set(KV_KEY, guests);
+  } catch (error) {
+    console.error("Error writing guests to KV:", error);
+    throw new Error("Өгөгдлийг хадгалахад алдаа гарлаа");
+  }
 }
 
-export function findGuest(id: string): Guest | undefined {
-  return readGuests().find((g) => g.id === id);
+/**
+ * Finds a specific guest by ID.
+ */
+export async function findGuest(id: string): Promise<Guest | undefined> {
+  const guests = await readGuests();
+  return guests.find((g) => g.id === id);
 }

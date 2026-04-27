@@ -8,7 +8,7 @@ interface Props {
 
 export default async function InvitePage({ params }: Props) {
   const { id } = await params;
-  const guest = findGuest(id);
+  const guest = await findGuest(id);
 
   if (!guest) notFound();
 

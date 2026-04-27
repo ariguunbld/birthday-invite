@@ -7,7 +7,7 @@ export async function GET(
   { params }: { params: Promise<{ id: string }> }
 ) {
   const { id } = await params;
-  const guest = findGuest(id);
+  const guest = await findGuest(id);
   if (!guest) {
     return NextResponse.json({ error: "Зочин олдсонгүй" }, { status: 404 });
   }

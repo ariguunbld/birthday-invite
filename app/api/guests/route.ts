@@ -7,7 +7,8 @@ export async function GET() {
   if (!(await isAuthenticated())) {
     return NextResponse.json({ error: "Нэвтрэх шаардлагатай" }, { status: 401 });
   }
-  return NextResponse.json(readGuests());
+  const guests = await readGuests();
+  return NextResponse.json(guests);
 }
 
 export async function POST(req: NextRequest) {
@@ -19,10 +20,10 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Нэр оруулна уу" }, { status: 400 });
   }
 
-  const guests = readGuests();
+  const guests = await readGuests();
   const newGuest = { id: uuidv4(), name: name.trim(), createdAt: new Date().toISOString() };
   guests.push(newGuest);
-  writeGuests(guests);
+  await writeGuests(guests);
 
   return NextResponse.json(newGuest, { status: 201 });
 }
