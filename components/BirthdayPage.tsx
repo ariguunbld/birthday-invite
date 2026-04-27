@@ -56,6 +56,7 @@ export default function BirthdayPage() {
   const titleLine2 = useRef<HTMLDivElement>(null);
   const heroDateRef = useRef<HTMLDivElement>(null);
   const subtitleRef = useRef<HTMLParagraphElement>(null);
+  const badgeRef = useRef<HTMLDivElement>(null);
   const hintRef = useRef<HTMLDivElement>(null);
   const detailsRef = useRef<HTMLElement>(null);
   const ctaRef = useRef<HTMLElement>(null);
@@ -280,7 +281,7 @@ export default function BirthdayPage() {
           — Миний нэг жилийн аялал —
         </h2>
 
-        <div className="photos-scroll">
+        <div className="photos-scroll" data-lenis-prevent>
           {PHOTOS.map(({ src, caption }, i) => (
             <figure
               key={src}
