@@ -16,6 +16,11 @@ export default function AdminPage() {
   const [newName, setNewName] = useState("");
   const [adding, setAdding] = useState(false);
   const [downloading, setDownloading] = useState<string | null>(null);
+  const [modal, setModal] = useState<{ isOpen: boolean; title: string; message: string }>({
+    isOpen: false,
+    title: "",
+    message: "",
+  });
 
   const fetchGuests = useCallback(async () => {
     const res = await fetch("/api/guests");
@@ -83,6 +88,41 @@ export default function AdminPage() {
     URL.revokeObjectURL(url);
     setDownloading(null);
   }
+
+  async function copyLink(id: string) {
+      const base = window.location.origin;
+      const url = `${base}/invite/${id}`;
+      await navigator.clipboard.writeText(url);
+      setModal({
+        isOpen: true,
+        title: "Амжилттай",
+        message: "Урилгын линк хуулагдлаа!",
+      });
+    }
+
+    async function copyQRImage(guest: Guest) {
+      try {
+        setDownloading(guest.id);
+        const res = await fetch(`/api/qr/${guest.id}`);
+        const blob = await res.blob();
+        const item = new ClipboardItem({ "image/png": blob });
+        await navigator.clipboard.write([item]);
+        setModal({
+          isOpen: true,
+          title: "Амжилттай",
+          message: `"${guest.name}"-ийн QR зураг хуулагдлаа! Одоо Messenger-тээ Paste хийж болно.`,
+        });
+      } catch (err) {
+        console.error(err);
+        setModal({
+          isOpen: true,
+          title: "Алдаа",
+          message: "Зургийг хуулахад алдаа гарлаа. Браузер тань дэмждэггүй байж магадгүй.",
+        });
+      } finally {
+        setDownloading(null);
+      }
+    }
 
   if (authed === null) {
     return (
@@ -192,27 +232,40 @@ export default function AdminPage() {
                   </div>
                   <div className="flex gap-2 shrink-0">
                     <button
+                      onClick={() => copyLink(guest.id)}
+                      className="rounded-xl bg-blue-50 px-3 py-2 text-xs font-bold text-blue-600 hover:bg-blue-100 transition"
+                    >
+                      Линк
+                    </button>
+                    <button
+                      onClick={() => copyQRImage(guest)}
+                      disabled={downloading === guest.id}
+                      className="rounded-xl bg-purple-50 px-3 py-2 text-xs font-bold text-purple-600 hover:bg-purple-100 transition disabled:opacity-50"
+                    >
+                      {downloading === guest.id ? "Түр хүлээнэ үү..." : "QR хуулах"}
+                    </button>
+                    <button
                       onClick={() => downloadQR(guest)}
                       disabled={downloading === guest.id}
-                      className="rounded-xl bg-purple-100 px-3 py-2 text-sm font-semibold text-purple-700 hover:bg-purple-200 transition disabled:opacity-50"
+                      className="rounded-xl bg-gray-100 px-3 py-2 text-xs font-bold text-gray-700 hover:bg-gray-200 transition disabled:opacity-50"
                     >
-                      {downloading === guest.id ? "⏳" : "📥 QR"}
+                      Татах
                     </button>
                     <a
                       href={`/invite/${guest.id}`}
                       target="_blank"
                       rel="noopener noreferrer"
-                      className="rounded-xl bg-pink-100 px-3 py-2 text-sm font-semibold text-pink-700 hover:bg-pink-200 transition"
+                      className="rounded-xl bg-pink-100 px-3 py-2 text-xs font-bold text-pink-700 hover:bg-pink-200 transition"
                     >
-                      👁️
+                      Харах
                     </a>
                     <button
                       onClick={() => {
                         if (confirm(`"${guest.name}"-г устгах уу?`)) deleteGuest(guest.id);
                       }}
-                      className="rounded-xl bg-red-50 px-3 py-2 text-sm font-semibold text-red-400 hover:bg-red-100 transition"
+                      className="rounded-xl bg-red-50 px-3 py-2 text-xs font-bold text-red-400 hover:bg-red-100 transition"
                     >
-                      🗑️
+                      Устгах
                     </button>
                   </div>
                 </li>
@@ -221,6 +274,27 @@ export default function AdminPage() {
           )}
         </div>
       </div>
+
+      {/* Custom Modal/Dialog */}
+      {modal.isOpen && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4 backdrop-blur-sm">
+          <div className="w-full max-w-sm animate-bounce-in rounded-3xl bg-white p-6 shadow-2xl">
+            <div className="mb-4 text-center">
+              <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 text-2xl">
+                {modal.title === "Амжилттай" ? "✅" : "❌"}
+              </div>
+              <h3 className="text-xl font-black text-gray-800">{modal.title}</h3>
+              <p className="mt-2 text-gray-500">{modal.message}</p>
+            </div>
+            <button
+              onClick={() => setModal({ ...modal, isOpen: false })}
+              className="w-full rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 py-3 font-bold text-white shadow-lg hover:opacity-90 transition"
+            >
+              Ойлголоо
+            </button>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
