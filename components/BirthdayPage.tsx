@@ -88,17 +88,17 @@ export default function BirthdayPage() {
 
     const ctx = gsap.context(() => {
       // ── Hero entrance ──────────────────────────────
-      const tl = gsap.timeline({ 
+      const tl = gsap.timeline({
         delay: 0.1,
-        onComplete: () => ScrollTrigger.refresh() // Анимаци дууссаны дараа refresh хийнэ
+        onComplete: () => ScrollTrigger.refresh(), // Анимаци дууссаны дараа refresh хийнэ
       });
-      
+
       tl.from(photoWrapRef.current, {
-          scale: 0.65,
-          opacity: 0,
-          duration: 1.1,
-          ease: "back.out(1.4)",
-        })
+        scale: 0.65,
+        opacity: 0,
+        duration: 1.1,
+        ease: "back.out(1.4)",
+      })
         .from(
           badgeRef.current,
           {
@@ -339,7 +339,7 @@ export default function BirthdayPage() {
             <div className="detail-divider" />
             <p className="detail-val">12:00</p>
             <p className="detail-sub text-[0.65rem] text-[#64748B] italic">
-              Үдийн зоог
+              Цагтаа ирээрэй
             </p>
           </div>
 

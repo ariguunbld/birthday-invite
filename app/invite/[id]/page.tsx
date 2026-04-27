@@ -137,7 +137,7 @@ export default async function InvitePage({ params }: Readonly<Props>) {
               <div className="detail-divider" />
               <p className="detail-val">12:00</p>
               <p className="detail-sub text-[0.65rem] text-[#64748B] italic">
-                Үдийн зоог
+                Цагтаа ирээрэй
               </p>
             </div>
 
