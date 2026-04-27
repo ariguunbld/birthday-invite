@@ -1,105 +1,146 @@
 import { notFound } from "next/navigation";
 import { findGuest } from "@/lib/db";
 import Confetti from "@/components/Confetti";
+import Image from "next/image";
 
 interface Props {
   params: Promise<{ id: string }>;
 }
 
-export default async function InvitePage({ params }: Props) {
+export default async function InvitePage({ params }: Readonly<Props>) {
   const { id } = await params;
   const guest = await findGuest(id);
 
   if (!guest) notFound();
 
-  const base = process.env.NEXT_PUBLIC_BASE_URL || "http://localhost:3000";
-  const inviteUrl = `${base}/invite/${id}`;
-  const qrSrc = `/api/qr/${id}`;
-
   return (
-    <div className="relative min-h-screen overflow-hidden bg-linear-to-br from-pink-100 via-yellow-50 to-purple-100">
+    <div className="relative min-h-screen bg-white text-[#0F172A] selection:bg-pink-100">
       <Confetti />
 
-      {/* Floating balloons — smaller on mobile */}
-      <div className="pointer-events-none absolute inset-0 overflow-hidden">
-        {["🎈", "🎀", "⭐", "🎊", "💫"].map((e, i) => (
-          <span
-            key={i}
-            className={`absolute text-2xl sm:text-4xl select-none ${i % 2 === 0 ? "animate-float" : "animate-float-delay"}`}
-            style={{ left: `${5 + i * 20}%`, top: `${5 + (i % 3) * 15}%`, animationDelay: `${i * 0.5}s` }}
-          >
-            {e}
-          </span>
-        ))}
+      {/* Background Mesh */}
+      <div className="mesh-bg">
+        <div className="mesh-blob blob-1" />
+        <div className="mesh-blob blob-2" />
+        <div className="mesh-blob blob-3" />
       </div>
 
-      <main className="relative z-10 flex min-h-screen flex-col items-center justify-center px-5 py-10 text-center">
-        {/* Guest greeting */}
-        <div className="animate-bounce-in mb-6 w-full max-w-xs sm:max-w-md">
-          <div className="inline-block w-full rounded-3xl bg-linear-to-r from-pink-400 via-purple-400 to-yellow-400 p-0.75 shadow-2xl">
-            <div className="rounded-3xl bg-white px-6 py-5">
-              <p className="text-xs font-semibold uppercase tracking-widest text-gray-400 mb-1">
-                Хүндэт
-              </p>
-              <h1 className="text-3xl sm:text-5xl font-black text-transparent bg-clip-text bg-linear-to-r from-pink-500 via-purple-500 to-yellow-500 leading-tight">
-                {guest.name}
-              </h1>
-            </div>
-          </div>
-        </div>
-
-        {/* 1 year badge */}
-        <div className="mb-5">
-          <div className="relative inline-flex items-center justify-center">
-            <div className="absolute inset-0 animate-spin-slow rounded-full bg-linear-to-r from-pink-400 via-yellow-400 to-purple-400 blur-sm opacity-60" />
-            <div className="relative flex h-24 w-24 sm:h-28 sm:w-28 items-center justify-center rounded-full bg-white shadow-xl">
-              <span className="text-5xl sm:text-6xl font-black text-transparent bg-clip-text bg-linear-to-b from-pink-500 to-purple-600 leading-none">
-                1
-              </span>
-            </div>
-          </div>
-        </div>
-
-        <h2 className="mb-1 text-2xl sm:text-4xl font-black text-gray-800">
-          НЭГ НАС БОЛЛОО! 🎂
-        </h2>
-        <p className="mb-7 text-gray-500 text-base">
-          Таны ирэлтийг хүсэн хүлээж байна 🥳
-        </p>
-
-        {/* Event details — row layout on mobile */}
-        <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 w-full max-w-xs sm:max-w-xl mb-7">
-          {[
-            { icon: "📅", label: "Огноо", val: "[Огноо]" },
-            { icon: "🕐", label: "Цаг", val: "[Цаг]" },
-            { icon: "📍", label: "Байршил", val: "[Байршил]" },
-          ].map(({ icon, label, val }) => (
-            <div
-              key={label}
-              className="flex items-center gap-4 sm:flex-col sm:items-center rounded-2xl bg-white/80 backdrop-blur px-5 py-4 shadow-md border border-purple-100"
-            >
-              <div className="text-3xl sm:mb-1">{icon}</div>
-              <div className="text-left sm:text-center">
-                <p className="text-xs font-bold uppercase tracking-wide text-gray-400">{label}</p>
-                <p className="font-semibold text-gray-800 text-sm">{val}</p>
+      <main className="relative z-10 mx-auto max-w-2xl px-6 py-12">
+        {/* Hero Section */}
+        <section className="mb-20 text-center">
+          <div className="mb-12">
+            <div className="hero-photo-wrap">
+              <div className="hero-photo-ring" />
+              <div className="hero-photo-frame">
+                <Image
+                  src="/child.jpeg"
+                  alt="Birthday Child"
+                  fill
+                  className="object-cover"
+                  priority
+                />
+              </div>
+              <div className="hero-badge">
+                <span className="badge-num text-2xl leading-none">1</span>
+                <span className="text-[8px] font-black uppercase tracking-tighter text-gray-400">
+                  Нас
+                </span>
               </div>
             </div>
-          ))}
-        </div>
+          </div>
 
-        {/* QR code */}
-        <div className="rounded-3xl bg-white shadow-2xl p-5 w-full max-w-65 sm:max-w-xs">
-          <p className="text-xs font-bold text-gray-500 mb-3 uppercase tracking-wide">
-            Таны урилгын QR код
-          </p>
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img
-            src={qrSrc}
-            alt={`QR урилга — ${guest.name}`}
-            className="w-full rounded-2xl"
-          />
-          <p className="mt-3 text-[10px] text-gray-400 break-all">{inviteUrl}</p>
-        </div>
+          <div className="space-y-2">
+            <p className="text-xs font-black uppercase tracking-[0.3em] text-[#3B82F6]">
+              Урилга
+            </p>
+            <h1 className="hero-line leading-tight">{guest.name}</h1>
+            <h2 className="hero-line hero-line--coral text-4xl sm:text-6xl">
+              Таныг урьж байна
+            </h2>
+          </div>
+        </section>
+
+        {/* Poem Section */}
+        <section className="mb-24 text-center">
+          <div className="mx-auto max-w-sm space-y-4 px-4">
+            <div className="h-px w-12 bg-pink-200 mx-auto" />
+            <p className="text-sm font-medium leading-relaxed italic text-gray-500">
+              &quot;Алтан наран мандахад алгаан тосож угтсан,
+              <br />
+              Ариун цагаан сүүн соёлтой монгол хүү болон төрсөн.
+              <br />
+              Анхны минь төрсөн өдөр - амьдралын минь нэгэн баяр,
+              <br />
+              Аав ээжийнхээ хамт таныг бид хүлээж байна.&quot;
+            </p>
+            <div className="h-px w-12 bg-pink-200 mx-auto" />
+          </div>
+        </section>
+
+        {/* Photo Gallery (Polaroids) */}
+        <section className="mb-24 -mx-6">
+          <div className="px-6 mb-6">
+            <h3 className="text-xs font-black uppercase tracking-widest text-gray-400">
+              Миний нэг жил
+            </h3>
+          </div>
+          <div className="photos-scroll">
+            {[
+              {
+                src: "/image1.jpeg",
+                rot: "-2deg",
+                cap: "Миний анхны инээмсэглэл",
+              },
+              {
+                src: "/with-parents.jpeg",
+                rot: "3deg",
+                cap: "Аав ээжтэйгээ хамт",
+              },
+              { src: "/image2.jpeg", rot: "-1deg", cap: "Тоглох хамгийн гоё" },
+              { src: "/image3.jpeg", rot: "2deg", cap: "Анхны алхам" },
+            ].map((p) => (
+              <div
+                key={p.src}
+                className="polaroid-card"
+                style={{ "--rot": p.rot } as React.CSSProperties}
+              >
+                <div className="tape" />
+                <div className="photo-frame">
+                  <Image
+                    src={p.src}
+                    alt={p.cap}
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+                <p className="polaroid-caption">{p.cap}</p>
+              </div>
+            ))}
+          </div>
+        </section>
+
+        {/* Details Grid */}
+        <section className="mb-24">
+          <div className="detail-grid">
+            <div className="detail-card">
+              <p className="detail-label">Огноо</p>
+              <div className="detail-divider" />
+              <p className="detail-val">2026.04.27</p>
+            </div>
+            <div className="detail-card">
+              <p className="detail-label">Цаг</p>
+              <div className="detail-divider" />
+              <p className="detail-val">15:00</p>
+            </div>
+            <div className="detail-card detail-card--full">
+              <p className="detail-label">Байршил</p>
+              <div className="detail-divider" />
+              <p className="detail-val">&quot;Sky Garden&quot; Ресторан</p>
+              <p className="mt-2 text-[10px] text-gray-400">
+                Сүхбаатар дүүрэг, 1-р хороо
+              </p>
+            </div>
+          </div>
+        </section>
       </main>
     </div>
   );
