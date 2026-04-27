@@ -74,11 +74,17 @@ export default function BirthdayPage() {
 
   // Lenis smooth scroll + GSAP animations
   useEffect(() => {
-    const lenis = new Lenis({ duration: 1.25 });
+    const lenis = new Lenis({
+      duration: 1.1,
+      lerp: 0.1,
+      wheelMultiplier: 1,
+      touchMultiplier: 1.2, // Утаснаас гүйлгэхэд илүү хөнгөн болгоно
+    });
+
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
-    gsap.ticker.lagSmoothing(0);
+    // gsap.ticker.lagSmoothing(0); // Заримдаа гацалт үүсгэдэг тул хасав
 
     const ctx = gsap.context(() => {
       // ── Hero entrance ──────────────────────────────
@@ -107,14 +113,9 @@ export default function BirthdayPage() {
           "-=0.3",
         )
         .from(
-          titleLine1.current,
-          { yPercent: 110, opacity: 0, duration: 0.7, ease: "power3.out" },
-          "-=0.25",
-        )
-        .from(
           titleLine2.current,
-          { yPercent: 110, opacity: 0, duration: 0.7, ease: "power3.out" },
-          "-=0.5",
+          { yPercent: 110, opacity: 0, duration: 0.8, ease: "power3.out" },
+          "-=0.3",
         )
         .from(
           heroDateRef.current,
@@ -239,18 +240,10 @@ export default function BirthdayPage() {
           <div className="flex flex-col gap-0">
             <div className="overflow-hidden">
               <div
-                ref={titleLine1}
-                className="text-[0.75rem] tracking-[0.5em] uppercase text-[#1E293B] font-black mb-3"
-              >
-                Нэг насны баяр
-              </div>
-            </div>
-            <div className="overflow-hidden">
-              <div
                 ref={titleLine2}
-                className="hero-line hero-line--coral text-[3.8rem]! sm:text-[5rem]! drop-shadow-sm"
+                className="hero-line hero-line--coral text-[2.8rem]! sm:text-[4rem]! drop-shadow-sm leading-tight px-4"
               >
-                Төрсөн өдөр
+                Миний нэг насны баяр
               </div>
             </div>
             <div
@@ -277,7 +270,7 @@ export default function BirthdayPage() {
       {/* ══ PHOTOS ════════════════════════════════════ */}
       <section className="relative z-10 min-h-screen flex flex-col justify-center py-20">
         <h2 className="section-heading font-(family-name:--font-playfair) text-2xl italic text-[#1C0F00] text-center mb-10 px-6">
-          — Нэг жилийн аялал —
+          — Миний нэг жилийн аялал —
         </h2>
 
         <div className="photos-scroll">

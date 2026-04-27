@@ -86,14 +86,14 @@ export default async function InvitePage({ params }: Readonly<Props>) {
           <div className="photos-scroll">
             {[
               {
-                src: "/image1.jpeg",
-                rot: "-2deg",
-                cap: "Миний анхны инээмсэглэл",
-              },
-              {
                 src: "/with-parents.jpeg",
                 rot: "3deg",
                 cap: "Аав ээжтэйгээ хамт",
+              },
+              {
+                src: "/image1.jpeg",
+                rot: "-2deg",
+                cap: "Миний анхны инээмсэглэл",
               },
               { src: "/image2.jpeg", rot: "-1deg", cap: "Тоглох хамгийн гоё" },
               { src: "/image3.jpeg", rot: "2deg", cap: "Анхны алхам" },
