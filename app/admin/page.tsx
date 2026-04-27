@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
+import Image from "next/image";
 
 interface Guest {
   id: string;
@@ -16,7 +17,12 @@ export default function AdminPage() {
   const [newName, setNewName] = useState("");
   const [adding, setAdding] = useState(false);
   const [downloading, setDownloading] = useState<string | null>(null);
-  const [modal, setModal] = useState<{ isOpen: boolean; title: string; message: string }>({
+  const [qrImageUrl, setQrImageUrl] = useState<string | null>(null);
+  const [modal, setModal] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+  }>({
     isOpen: false,
     title: "",
     message: "",
@@ -30,10 +36,16 @@ export default function AdminPage() {
   useEffect(() => {
     fetch("/api/guests")
       .then((r) => {
-        if (r.ok) { setAuthed(true); return r.json(); }
-        setAuthed(false); return [];
+        if (r.ok) {
+          setAuthed(true);
+          return r.json();
+        }
+        setAuthed(false);
+        return [];
       })
-      .then((data) => { if (Array.isArray(data)) setGuests(data); });
+      .then((data) => {
+        if (Array.isArray(data)) setGuests(data);
+      });
   }, []);
 
   async function login(e: React.FormEvent) {
@@ -44,8 +56,10 @@ export default function AdminPage() {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ password }),
     });
-    if (res.ok) { setAuthed(true); fetchGuests(); }
-    else setLoginError("Нууц үг буруу байна");
+    if (res.ok) {
+      setAuthed(true);
+      fetchGuests();
+    } else setLoginError("Нууц үг буруу байна");
   }
 
   async function logout() {
@@ -76,70 +90,71 @@ export default function AdminPage() {
     setGuests((prev) => prev.filter((g) => g.id !== id));
   }
 
-  async function downloadQR(guest: Guest) {
-    setDownloading(guest.id);
-    const res = await fetch(`/api/qr/${guest.id}`);
-    const blob = await res.blob();
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = `invite-${guest.name}.png`;
-    a.click();
-    URL.revokeObjectURL(url);
-    setDownloading(null);
+  async function copyLink(id: string) {
+    const base = globalThis.location.origin;
+    const url = `${base}/invite/${id}`;
+    await navigator.clipboard.writeText(url);
+    setModal({
+      isOpen: true,
+      title: "Амжилттай",
+      message: "Урилгын линк хуулагдлаа!",
+    });
   }
 
-  async function copyLink(id: string) {
-      const base = window.location.origin;
-      const url = `${base}/invite/${id}`;
-      await navigator.clipboard.writeText(url);
+  async function copyQRImage(guest: Guest) {
+    setDownloading(guest.id);
+    let blob: Blob | null = null;
+    try {
+      const res = await fetch(`/api/qr/${guest.id}`);
+      blob = await res.blob();
+      const item = new ClipboardItem({ "image/png": blob });
+      await navigator.clipboard.write([item]);
       setModal({
         isOpen: true,
         title: "Амжилттай",
-        message: "Урилгын линк хуулагдлаа!",
+        message: `"${guest.name}"-ийн QR зураг хуулагдлаа! Одоо Messenger-тээ Paste хийж болно.`,
       });
-    }
-
-    async function copyQRImage(guest: Guest) {
-      try {
-        setDownloading(guest.id);
-        const res = await fetch(`/api/qr/${guest.id}`);
-        const blob = await res.blob();
-        const item = new ClipboardItem({ "image/png": blob });
-        await navigator.clipboard.write([item]);
+    } catch (err) {
+      console.error("Clipboard API failed:", err);
+      // Fallback for mobile/unsupported browsers: show image in modal
+      if (blob) {
+        const url = URL.createObjectURL(blob);
+        setQrImageUrl(url);
         setModal({
           isOpen: true,
-          title: "Амжилттай",
-          message: `"${guest.name}"-ийн QR зураг хуулагдлаа! Одоо Messenger-тээ Paste хийж болно.`,
+          title: "Зураг дээр удаан дарна уу",
+          message: `Браузер тань шууд хуулахыг дэмжихгүй байна. Доорх зураг дээр удаан дарж "Copy" эсвэл "Save Image" хийнэ үү.`,
         });
-      } catch (err) {
-        console.error(err);
+      } else {
         setModal({
           isOpen: true,
           title: "Алдаа",
-          message: "Зургийг хуулахад алдаа гарлаа. Браузер тань дэмждэггүй байж магадгүй.",
+          message: "Зургийг авахад алдаа гарлаа. Дахин оролдоно уу.",
         });
-      } finally {
-        setDownloading(null);
       }
+    } finally {
+      setDownloading(null);
     }
+  }
 
   if (authed === null) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-pink-100 to-purple-100">
-        <div className="text-purple-400 text-xl animate-pulse">Уншиж байна...</div>
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-pink-100 to-purple-100">
+        <div className="text-purple-400 text-xl animate-pulse">
+          Уншиж байна...
+        </div>
       </div>
     );
   }
 
   if (!authed) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-pink-100 via-yellow-50 to-purple-100 px-4">
+      <div className="flex min-h-screen items-center justify-center bg-linear-to-br from-pink-100 via-yellow-50 to-purple-100 px-4">
         <div className="w-full max-w-sm">
           <div className="rounded-3xl bg-white shadow-2xl p-8">
             <div className="text-center mb-6">
               <div className="text-6xl mb-3">🔐</div>
-              <h1 className="text-2xl font-black text-gray-800">Admin Panel</h1>
+              <h1 className="text-2xl font-black text-gray-800">Admin</h1>
               <p className="text-gray-400 text-sm mt-1">Нууц үгээ оруулна уу</p>
             </div>
             <form onSubmit={login} className="space-y-4">
@@ -156,7 +171,7 @@ export default function AdminPage() {
               )}
               <button
                 type="submit"
-                className="w-full rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 py-3 font-bold text-white shadow-lg hover:opacity-90 transition"
+                className="w-full rounded-2xl bg-linear-to-r from-pink-500 to-purple-500 py-3 font-bold text-white shadow-lg hover:opacity-90 transition"
               >
                 Нэвтрэх
               </button>
@@ -168,12 +183,14 @@ export default function AdminPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-pink-50 via-yellow-50 to-purple-50 px-4 py-8">
+    <div className="min-h-screen bg-linear-to-br from-pink-50 via-yellow-50 to-purple-50 px-4 py-8">
       <div className="mx-auto max-w-3xl">
         {/* Header */}
         <div className="mb-8 flex items-center justify-between">
           <div>
-            <h1 className="text-3xl font-black text-gray-800">🎂 Admin Panel</h1>
+            <h1 className="text-3xl font-black text-gray-800">
+              🎂 Admin Panel
+            </h1>
             <p className="text-gray-400 text-sm">Зочдын урилга удирдах</p>
           </div>
           <button
@@ -186,7 +203,9 @@ export default function AdminPage() {
 
         {/* Add guest */}
         <div className="mb-6 rounded-3xl bg-white shadow-lg p-6">
-          <h2 className="text-lg font-bold text-gray-700 mb-4">Шинэ зочин нэмэх</h2>
+          <h2 className="text-lg font-bold text-gray-700 mb-4">
+            Шинэ зочин нэмэх
+          </h2>
           <form onSubmit={addGuest} className="flex gap-3">
             <input
               value={newName}
@@ -197,7 +216,7 @@ export default function AdminPage() {
             <button
               type="submit"
               disabled={adding || !newName.trim()}
-              className="rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 px-6 py-3 font-bold text-white shadow hover:opacity-90 transition disabled:opacity-50"
+              className="rounded-2xl bg-linear-to-r from-pink-500 to-purple-500 px-6 py-3 font-bold text-white shadow hover:opacity-90 transition disabled:opacity-50"
             >
               {adding ? "..." : "Нэмэх"}
             </button>
@@ -223,13 +242,18 @@ export default function AdminPage() {
           ) : (
             <ul className="divide-y divide-gray-50">
               {guests.map((guest) => (
-                <li key={guest.id} className="flex flex-col sm:flex-row sm:items-center gap-4 px-6 py-4 hover:bg-gray-50 transition">
+                <li
+                  key={guest.id}
+                  className="flex flex-col sm:flex-row sm:items-center gap-4 px-6 py-4 hover:bg-gray-50 transition"
+                >
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-800 truncate">{guest.name}</p>
+                    <p className="font-semibold text-gray-800 truncate">
+                      {guest.name}
+                    </p>
                     <p className="text-xs text-gray-400 mt-0.5">
                       {(() => {
                         const date = new Date(guest.createdAt);
-                        return `${date.getFullYear()} / ${String(date.getMonth() + 1).padStart(2, '0')} / ${String(date.getDate()).padStart(2, '0')}`;
+                        return `${date.getFullYear()} / ${String(date.getMonth() + 1).padStart(2, "0")} / ${String(date.getDate()).padStart(2, "0")}`;
                       })()}
                     </p>
                   </div>
@@ -245,7 +269,9 @@ export default function AdminPage() {
                       disabled={downloading === guest.id}
                       className="rounded-xl bg-purple-50 px-3 py-2 text-xs font-bold text-purple-600 hover:bg-purple-100 transition disabled:opacity-50"
                     >
-                      {downloading === guest.id ? "Түр хүлээнэ үү..." : "QR хуулах"}
+                      {downloading === guest.id
+                        ? "Түр хүлээнэ үү..."
+                        : "QR хуулах"}
                     </button>
                     <a
                       href={`/invite/${guest.id}`}
@@ -257,7 +283,8 @@ export default function AdminPage() {
                     </a>
                     <button
                       onClick={() => {
-                        if (confirm(`"${guest.name}"-г устгах уу?`)) deleteGuest(guest.id);
+                        if (confirm(`"${guest.name}"-г устгах уу?`))
+                          deleteGuest(guest.id);
                       }}
                       className="rounded-xl bg-red-50 px-3 py-2 text-xs font-bold text-red-400 hover:bg-red-100 transition"
                     >
@@ -277,14 +304,39 @@ export default function AdminPage() {
           <div className="w-full max-w-sm animate-bounce-in rounded-3xl bg-white p-6 shadow-2xl">
             <div className="mb-4 text-center">
               <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-purple-100 text-2xl">
-                {modal.title === "Амжилттай" ? "✅" : "❌"}
+                {modal.title === "Амжилттай"
+                  ? "✅"
+                  : modal.title === "Алдаа"
+                    ? "❌"
+                    : "🖼️"}
               </div>
-              <h3 className="text-xl font-black text-gray-800">{modal.title}</h3>
-              <p className="mt-2 text-gray-500">{modal.message}</p>
+              <h3 className="text-xl font-black text-gray-800">
+                {modal.title}
+              </h3>
+              <p className="mt-2 text-sm text-gray-500">{modal.message}</p>
+
+              {qrImageUrl && (
+                <div className="mt-4 flex justify-center">
+                  <Image
+                    src={qrImageUrl}
+                    alt="QR Code"
+                    width={192}
+                    height={192}
+                    className="rounded-xl border-4 border-purple-100 shadow-md"
+                    unoptimized
+                  />
+                </div>
+              )}
             </div>
             <button
-              onClick={() => setModal({ ...modal, isOpen: false })}
-              className="w-full rounded-2xl bg-gradient-to-r from-pink-500 to-purple-500 py-3 font-bold text-white shadow-lg hover:opacity-90 transition"
+              onClick={() => {
+                setModal({ ...modal, isOpen: false });
+                if (qrImageUrl) {
+                  URL.revokeObjectURL(qrImageUrl);
+                  setQrImageUrl(null);
+                }
+              }}
+              className="w-full rounded-2xl bg-linear-to-r from-pink-500 to-purple-500 py-3 font-bold text-white shadow-lg hover:opacity-90 transition"
             >
               Ойлголоо
             </button>

@@ -54,7 +54,7 @@ export default async function InvitePage({ params }: Readonly<Props>) {
             </p>
             <h1 className="hero-line leading-tight">{guest.name}</h1>
             <h2 className="hero-line hero-line--coral text-4xl sm:text-6xl">
-              Таныг урьж байна
+              Таныг төрсөн өдөрт урьж байна
             </h2>
           </div>
         </section>

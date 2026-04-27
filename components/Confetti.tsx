@@ -10,7 +10,7 @@ export default function Confetti() {
       {PIECES.map((piece, i) => (
         <span
           key={i}
-          className="confetti text-2xl select-none"
+          className="confetti text-2xl select-none pointer-events-none"
           style={{
             left: `${(i * 13 + 4) % 98}%`,
             animationDuration: `${DURATIONS[i]}s`,
