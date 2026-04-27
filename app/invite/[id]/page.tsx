@@ -3,6 +3,8 @@ import { findGuest } from "@/lib/db";
 import Confetti from "@/components/Confetti";
 import Image from "next/image";
 
+import RSVPForm from "@/components/RSVPForm";
+
 interface Props {
   params: Promise<{ id: string }>;
 }
@@ -163,12 +165,17 @@ export default async function InvitePage({ params }: Readonly<Props>) {
           </div>
         </section>
 
+        {/* RSVP Section */}
+        <section className="mb-24 px-5">
+          <RSVPForm guestId={guest.id} initialStatus={guest.status} />
+        </section>
+
         {/* CTA Section */}
         <section className="relative z-10 px-5 pb-24 flex justify-center">
           <div className="cta-card">
             <div className="cta-inner">
               <p className="font-(family-name:--font-playfair) text-xl italic text-[#0F172A] mb-2 text-center">
-                Та бүхнийг тэсэн ядан хүлээж байна! 🥳
+                Хамтдаа дурсамж бүтээж, хөгжилтэй өнгөрөөе 🎂
               </p>
             </div>
           </div>

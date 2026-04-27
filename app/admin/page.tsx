@@ -7,6 +7,8 @@ interface Guest {
   id: string;
   name: string;
   createdAt: string;
+  status?: "attending" | "declined";
+  updatedAt?: string;
 }
 
 export default function AdminPage() {
@@ -225,13 +227,23 @@ export default function AdminPage() {
 
         {/* Guest list */}
         <div className="rounded-3xl bg-white shadow-lg overflow-hidden">
-          <div className="px-6 py-4 border-b border-gray-100">
+          <div className="px-6 py-4 border-b border-gray-100 flex items-center justify-between flex-wrap gap-4">
             <h2 className="font-bold text-gray-700">
               Зочдын жагсаалт{" "}
               <span className="ml-1 rounded-full bg-purple-100 px-2 py-0.5 text-xs font-bold text-purple-600">
                 {guests.length}
               </span>
             </h2>
+            <div className="flex gap-4 text-xs font-bold">
+              <div className="flex items-center gap-1.5 text-green-600 bg-green-50 px-3 py-1.5 rounded-full">
+                <span>✅ Очно:</span>
+                <span>{guests.filter((g) => g.status === "attending").length}</span>
+              </div>
+              <div className="flex items-center gap-1.5 text-gray-500 bg-gray-50 px-3 py-1.5 rounded-full">
+                <span>😔 Амжихгүй:</span>
+                <span>{guests.filter((g) => g.status === "declined").length}</span>
+              </div>
+            </div>
           </div>
 
           {guests.length === 0 ? (
@@ -247,9 +259,26 @@ export default function AdminPage() {
                   className="flex flex-col sm:flex-row sm:items-center gap-4 px-6 py-4 hover:bg-gray-50 transition"
                 >
                   <div className="flex-1 min-w-0">
-                    <p className="font-semibold text-gray-800 truncate">
-                      {guest.name}
-                    </p>
+                    <div className="flex items-center gap-2">
+                      <p className="font-semibold text-gray-800 truncate">
+                        {guest.name}
+                      </p>
+                      {guest.status === "attending" && (
+                        <span className="rounded-full bg-green-100 px-2 py-0.5 text-[10px] font-black uppercase text-green-600">
+                          ✅ Очно
+                        </span>
+                      )}
+                      {guest.status === "declined" && (
+                        <span className="rounded-full bg-gray-100 px-2 py-0.5 text-[10px] font-black uppercase text-gray-400">
+                          😔 Амжихгүй
+                        </span>
+                      )}
+                      {!guest.status && (
+                        <span className="rounded-full bg-blue-50 px-2 py-0.5 text-[10px] font-black uppercase text-blue-400">
+                          ⌛ Хүлээгдэж буй
+                        </span>
+                      )}
+                    </div>
                     <p className="text-xs text-gray-400 mt-0.5">
                       {(() => {
                         const date = new Date(guest.createdAt);

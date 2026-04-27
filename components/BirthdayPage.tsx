@@ -373,7 +373,7 @@ export default function BirthdayPage() {
         <div className="cta-card">
           <div className="cta-inner">
             <p className="font-(family-name:--font-playfair) text-xl italic text-[#0F172A] mb-2">
-              Та бүхнийг тэсэн ядан хүлээж байна! 🥳
+              Хамтдаа дурсамж бүтээж, хөгжилтэй өнгөрөөе 🎂
             </p>
           </div>
         </div>

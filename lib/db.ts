@@ -4,6 +4,8 @@ export interface Guest {
   id: string;
   name: string;
   createdAt: string;
+  status?: "attending" | "declined";
+  updatedAt?: string;
 }
 
 const KV_KEY = "guests";
