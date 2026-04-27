@@ -84,13 +84,16 @@ export default function BirthdayPage() {
     lenis.on("scroll", ScrollTrigger.update);
     const tick = (time: number) => lenis.raf(time * 1000);
     gsap.ticker.add(tick);
-    // gsap.ticker.lagSmoothing(0); // Заримдаа гацалт үүсгэдэг тул хасав
+    gsap.ticker.lagSmoothing(0); // Эхний scroll гацах асуудлыг шийднэ
 
     const ctx = gsap.context(() => {
       // ── Hero entrance ──────────────────────────────
-      gsap
-        .timeline({ delay: 0.1 })
-        .from(photoWrapRef.current, {
+      const tl = gsap.timeline({ 
+        delay: 0.1,
+        onComplete: () => ScrollTrigger.refresh() // Анимаци дууссаны дараа refresh хийнэ
+      });
+      
+      tl.from(photoWrapRef.current, {
           scale: 0.65,
           opacity: 0,
           duration: 1.1,

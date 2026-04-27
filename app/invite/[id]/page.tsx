@@ -90,13 +90,13 @@ export default async function InvitePage({ params }: Readonly<Props>) {
                 rot: "3deg",
                 cap: "Аав ээжтэйгээ хамт",
               },
+              { src: "/image2.jpeg", rot: "-1deg", cap: "Тоглох хамгийн гоё" },
+              { src: "/image3.jpeg", rot: "2deg", cap: "Анхны алхам" },
               {
                 src: "/image1.jpeg",
                 rot: "-2deg",
                 cap: "Миний анхны инээмсэглэл",
               },
-              { src: "/image2.jpeg", rot: "-1deg", cap: "Тоглох хамгийн гоё" },
-              { src: "/image3.jpeg", rot: "2deg", cap: "Анхны алхам" },
             ].map((p) => (
               <div
                 key={p.src}
